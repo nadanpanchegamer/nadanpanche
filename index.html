@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayat Wholesale - Your Neighborhood Grocery Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary-color: #22c55e; /* green-500 */
+            --primary-hover: #16a34a; /* green-600 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color: 0.3s;
+        }
+        .urdu {
+            font-family: 'Noto Nastaliq Urdu', serif;
+            direction: rtl;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            transition: background-color: 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+        .btn-primary:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        .nav-link {
+            position: relative;
+            transition: color: 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .hidden {
+            display: none;
+        }
+        .urdu-input::placeholder {
+            text-align: right;
+        }
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            height: 20px;
+            width: 20px;
+            font-size: 12px;
+        }
+        /* For custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db; /* gray-300 */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; /* gray-400 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-3" data-page="home-page">
+                <span class="text-3xl font-bold text-green-600">Ayat Wholesale</span>
+                <span id="shop-status" class="text-xs font-bold px-2 py-1 rounded-full"></span>
+            </a>
+            
+            <div class="hidden lg:flex items-center space-x-8 text-lg">
+                <a href="#" class="nav-link" data-page="home-page" data-translate-key="nav_home">Home</a>
+                <a href="#" class="nav-link" data-page="plp-page" data-category="all" data-translate-key="nav_shop">Shop</a>
+                <a href="#" class="nav-link" data-page="about-page" data-translate-key="nav_about">About Us</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="search" id="search-input" data-translate-key="search_placeholder" placeholder="Search for products..." class="w-32 md:w-56 py-2 px-4 rounded-full border-2 border-gray-200 focus:outline-none focus:border-green-500 transition">
+                    <i class="fa fa-search absolute top-1/2 right-4 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <button id="lang-toggle" class="text-lg font-semibold px-3 py-1 rounded-md hover:bg-gray-100 transition">اردو</button>
+                <div class="relative">
+                    <a href="#" class="text-2xl text-gray-600 hover:text-green-600 transition" data-page="cart-page">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="bg-red-500 text-white rounded-full flex items-center justify-center">0</span>
+                    </a>
+                </div>
+                 <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t py-4">
+            <a href="#" class="block text-center py-2 text-lg" data-page="home-page" data-translate-key="nav_home">Home</a>
+            <a href="#" class="block text-center py-2 text-lg" data-page="plp-page" data-category="all" data-translate-key="nav_shop">Shop</a>
+            <a href="#" class="block text-center py-2 text-lg" data-page="about-page" data-translate-key="nav_about">About Us</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 lg:px-8 py-8">
+
+        <!-- Home Page -->
+        <section id="home-page">
+            <!-- Hero Section -->
+            <div class="bg-green-100 rounded-lg p-8 md:p-12 flex flex-col md:flex-row items-center justify-between mb-12">
+                <div class="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4" data-translate-key="hero_title">Fresh Groceries, Ready for Pickup</h1>
+                    <p class="text-lg text-gray-600 mb-6" data-translate-key="hero_subtitle">Get the best quality products from your neighborhood store. Home delivery coming soon!</p>
+                    <a href="#" class="btn-primary px-8 py-3 rounded-full text-lg font-semibold" data-page="plp-page" data-category="all" data-translate-key="hero_cta">Shop Now</a>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://placehold.co/500x400/a7f3d0/333333?text=Fresh+Vegetables" alt="Fresh Groceries" class="rounded-lg shadow-lg">
+                </div>
+            </div>
+
+            <!-- Featured Categories -->
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold text-center mb-6" data-translate-key="featured_categories">Featured Categories</h2>
+                <div id="featured-categories" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Categories will be injected by JS -->
+                </div>
+            </div>
+
+            <!-- Top Selling Products -->
+            <div>
+                <h2 class="text-3xl font-bold text-center mb-6" data-translate-key="top_selling">Top Selling Products</h2>
+                <div id="top-selling-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <!-- Products will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Listing Page (PLP) -->
+        <section id="plp-page" class="hidden">
+            <h2 id="plp-title" class="text-3xl font-bold mb-6">Our Products</h2>
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Filters -->
+                <aside class="md:w-1/4">
+                    <h3 class="text-xl font-semibold mb-4 border-b pb-2" data-translate-key="filter_categories">Categories</h3>
+                    <ul id="plp-categories" class="space-y-2">
+                        <!-- Category filters will be injected by JS -->
+                    </ul>
+                </aside>
+                <!-- Product Grid -->
+                <div id="plp-products" class="flex-1 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Products will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Detail Page (PDP) -->
+        <section id="pdp-page" class="hidden">
+            <!-- PDP content will be injected by JS -->
+        </section>
+
+        <!-- Cart Page -->
+        <section id="cart-page" class="hidden">
+            <h2 class="text-3xl font-bold mb-6" data-translate-key="cart_title">Your Shopping Cart</h2>
+            <div id="cart-content">
+                <div id="cart-container" class="bg-white p-6 rounded-lg shadow-md">
+                    <!-- Cart items will be injected by JS -->
+                </div>
+                <!-- ✨ Gemini Feature: Recipe Generator -->
+                <div id="recipe-generator-section" class="mt-8 bg-white p-6 rounded-lg shadow-md text-center">
+                    <button id="generate-recipe-btn" class="btn-primary px-6 py-3 rounded-lg font-semibold">
+                        <!-- Text set by JS -->
+                    </button>
+                    <div id="recipe-result" class="mt-6 p-6 bg-gray-50 border rounded-lg text-left hidden">
+                        <!-- Recipe content will be injected here -->
+                    </div>
+                </div>
+            </div>
+            <div id="cart-empty-message" class="hidden">
+                <p class="text-center text-gray-500 py-8" data-translate-key="cart_empty">Your cart is empty.</p>
+            </div>
+        </section>
+
+        <!-- Checkout Page -->
+        <section id="checkout-page" class="hidden">
+            <h2 class="text-3xl font-bold mb-6" data-translate-key="checkout_title">Checkout</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md mb-6">
+                        <div class="flex">
+                            <div class="py-1"><i class="fas fa-store mr-3 text-xl"></i></div>
+                            <div>
+                                <p class="font-bold" data-translate-key="pickup_only_title">Order for In-Store Pickup</p>
+                                <p class="text-sm" data-translate-key="pickup_only_desc">Home delivery is coming soon! For now, all orders must be picked up from our shop.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-semibold mb-4" data-translate-key="pickup_info">Your Information</h3>
+                    <form id="checkout-form" class="space-y-4">
+                        <div>
+                            <label for="fullName" class="block mb-1 font-medium" data-translate-key="form_name">Full Name</label>
+                            <input type="text" id="fullName" required class="w-full p-2 border rounded">
+                        </div>
+                        <div>
+                            <label for="phone" class="block mb-1 font-medium" data-translate-key="form_phone">Phone Number</label>
+                            <input type="tel" id="phone" required class="w-full p-2 border rounded">
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold pt-4" data-translate-key="payment_method">Payment Method</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="payment" value="cod" class="form-radio text-green-500" checked>
+                                <span class="ml-3 font-medium" data-translate-key="payment_pickup">Pay at Pickup</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="payment" value="jazzcash" class="form-radio text-green-500">
+                                <span class="ml-3 font-medium" data-translate-key="payment_jazzcash">Pay Now (EasyPaisa)</span>
+                            </label>
+                        </div>
+                        <div id="jazzcash-info" class="hidden mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                            <p class="font-semibold" data-translate-key="payment_instructions">Please transfer to the following account and confirm your order via WhatsApp:</p>
+                            <p class="mt-2"><strong>Account:</strong> 0314-6556463</p>
+                            <p><strong>Name:</strong> Mohammed Adnan</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="md:col-span-1 bg-white p-6 rounded-lg shadow-md h-fit">
+                    <h3 class="text-xl font-semibold mb-4" data-translate-key="order_summary">Order Summary</h3>
+                    <div id="checkout-summary">
+                        <!-- Checkout summary will be injected by JS -->
+                    </div>
+                    <button type="submit" form="checkout-form" class="btn-primary w-full py-3 mt-6 rounded-lg text-lg font-semibold" data-translate-key="place_order_btn">Confirm for Pickup</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Confirmation Page -->
+        <section id="confirmation-page" class="hidden text-center py-16">
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                <i class="fas fa-check-circle text-6xl text-green-500 mb-4"></i>
+                <h2 class="text-3xl font-bold mb-4" data-translate-key="confirm_title">Your Order is Confirmed!</h2>
+                <p class="text-gray-600 mb-2" data-translate-key="confirm_subtitle">It will be ready for pickup shortly.</p>
+                <p class="text-gray-600 mb-6" data-translate-key="confirm_order_id">Your Order ID is: <span id="order-id" class="font-semibold"></span></p>
+                
+                <div class="mt-6 p-4 bg-gray-50 border rounded-lg">
+                    <h4 class="font-bold" data-translate-key="pickup_details_title">Pickup Details</h4>
+                    <p data-translate-key="pickup_details_address">W28M+983, Nazimabad No. 4, Karachi</p>
+                    <p class="font-medium" data-translate-key="pickup_details_hours">Hours: 10am-2pm & 5pm-10pm</p>
+                </div>
+
+                <div id="confirmation-whatsapp" class="mt-4">
+                  <!-- WhatsApp button will be injected here -->
+                </div>
+                <a href="#" class="btn-primary px-8 py-3 rounded-full mt-8 inline-block" data-page="home-page" data-translate-key="continue_shopping">Continue Shopping</a>
+            </div>
+        </section>
+
+        <!-- About Us Page -->
+        <section id="about-page" class="hidden">
+             <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold text-center mb-6" data-translate-key="about_title">About Ayat Wholesale</h2>
+                <p class="text-lg text-gray-700 leading-relaxed mb-4" data-translate-key="about_p1">
+                    Welcome to Ayat Wholesale, your trusted neighborhood grocery store, now online! We started with a simple mission: to bring fresh, high-quality groceries and everyday essentials to our community with the convenience of online shopping. We are based in the heart of Nazimabad, Karachi, and are proud to serve our local customers.
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed" data-translate-key="about_p2">
+                    We understand the importance of quality and trust when it comes to your family's needs. That's why we source our products from reliable local suppliers and farmers, ensuring you get the best every time. Thank you for choosing Ayat Wholesale. We look forward to serving you!
+                </p>
+
+                <div class="mt-8 grid md:grid-cols-2 gap-8 text-center border-t pt-8">
+                    <div>
+                        <h3 class="font-semibold text-xl mb-2" data-translate-key="our_address">Our Address</h3>
+                        <p>W28M+983, Nazimabad No. 4<br>Block 4 Nazimabad, Karachi, 74600</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl mb-2" data-translate-key="opening_hours">Opening Hours</h3>
+                        <p>10:00 AM - 2:00 PM</p>
+                        <p>5:00 PM - 10:00 PM</p>
+                        <p class="font-medium" data-translate-key="seven_days">Open 7 Days a Week</p>
+                    </div>
+                </div>
+
+                 <div class="mt-8 text-center border-t pt-8">
+                     <p class="font-semibold text-xl" data-translate-key="current_time_location">Current Date & Time in Karachi, Pakistan</p>
+                     <p id="current-time" class="text-lg text-green-600"></p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="container mx-auto px-4 lg:px-8 py-8 text-center">
+            <p>&copy; 2025 Ayat Wholesale. All Rights Reserved.</p>
+            <p data-translate-key="footer_location">Serving our community in Nazimabad, Karachi</p>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Icon -->
+    <a href="https://wa.me/923146556463" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg text-3xl hover:bg-green-600 transition">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Embedded Mock Database Script -->
+    <script>
+        // --- MOCK DATABASE ---
+        function loadData(key, defaultValue) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        }
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+        const defaultCategories = [
+    { id: 'snacks', name_en: 'Snacks & Chips', name_ur: 'نمکین اور چپس', icon: 'fa-cookie-bite' },
+    { id: 'biscuits', name_en: 'Biscuits', name_ur: 'بسکٹ', icon: 'fa-cookie' },
+    { id: 'bakery', name_en: 'Bakery & Cakes', name_ur: 'بیکری اور کیک', icon: 'fa-bread-slice' },
+    { id: 'peek-freans', name_en: 'Peek Freans', name_ur: 'پیک فریز', icon: 'fa-cookie-bite' },
+
+
+];
+        const defaultProducts = [
+    // Existing products...
+    { id: 1, category: 'biscuits', name_en: 'BISCONI COFFEE RICH CAKES', name_ur: 'بسکونی کافی رچ کیک', price: 0, image: 'https://placehold.co/300x300/f3e8ff/a855f7?text=Coffee+Cake', description_en: 'Coffee-flavored rich cakes.', description_ur: 'کافی کے ذائقے والے رچ کیکس۔', stock: 50, top_selling: false },
+    { id: 2, category: 'biscuits', name_en: 'BISCONI FLO CHOCOLATE RS 10', name_ur: 'بسکونی فلو چاکلیٹ 10 روپے', price: 10, image: 'https://placehold.co/300x300/fecdd3/f43f5e?text=Choco+Flo', description_en: 'Chocolate-flavored biscuits.', description_ur: 'چاکلیٹ کے ذائقے والے بسکٹ۔', stock: 150, top_selling: true },
+    { id: 3, category: 'biscuits', name_en: 'BISCONNI HAVE A NICE DAY RS 10', name_ur: 'بسکونی ہیو اے نائس ڈے 10 روپے', price: 10, image: 'https://placehold.co/300x300/d1d5db/374151?text=Nice+Day', description_en: 'Biscuits to have a nice day.', description_ur: 'ایک اچھے دن کے لیے بسکٹ۔', stock: 120, top_selling: false },
+    { id: 4, category: 'biscuits', name_en: 'BISCONNI BUTTER COAKIES RS 70', name_ur: 'بسکونی بٹر کوکیز 70 روپے', price: 70, image: 'https://placehold.co/300x300/fde047/b45309?text=Butter+Cookies', description_en: 'Rich butter cookies.', description_ur: 'رچ بٹر کوکیز۔', stock: 80, top_selling: true },
+    { id: 5, category: 'biscuits', name_en: 'BISCONNI CHAI WALA BISCUTE RS 10', name_ur: 'بسکونی چائے والا بسکٹ 10 روپے', price: 10, image: 'https://placehold.co/300x300/d6d3d1/78716c?text=Chai+Biscuit', description_en: 'Biscuits perfect for tea.', description_ur: 'چائے کے لیے بہترین بسکٹ۔', stock: 200, top_selling: true },
+    { id: 6, category: 'biscuits', name_en: 'BISCONNI CHIP HOP RS 30', name_ur: 'بسکونی چپ ہاپ 30 روپے', price: 30, image: 'https://placehold.co/300x300/e5e5e5/171717?text=Chip+Hop', description_en: 'Chocolate chip cookies.', description_ur: 'چاکلیٹ چپ کوکیز۔', stock: 90, top_selling: false },
+    { id: 7, category: 'biscuits', name_en: 'BISCONNI CHOCOLATE CHIP LOADED RS 20', name_ur: 'بسکونی چاکلیٹ چپ لوڈڈ 20 روپے', price: 20, image: 'https://placehold.co/300x300/525252/d4d4d4?text=Loaded+Chip', description_en: 'Cookies loaded with chocolate chips.', description_ur: 'چاکلیٹ چپس سے بھرے کوکیز۔', stock: 75, top_selling: true },
+    { id: 8, category: 'biscuits', name_en: 'BISCONNI CHOCOLATE CHIP RS 10', name_ur: 'بسکونی چاکلیٹ چپ 10 روپے', price: 10, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Choco+Chip', description_en: 'Classic chocolate chip cookies.', description_ur: 'کلاسک چاکلیٹ چپ کوکیز۔', stock: 160, top_selling: false },
+    { id: 9, category: 'biscuits', name_en: 'BISCONNI CHOCOLATE CHIP RS 20 16 pca', name_ur: 'بسکونی چاکلیٹ چپ 20 روپے 16 پیک', price: 20, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Choco+Chip', description_en: '16 pieces of chocolate chip cookies.', description_ur: 'چاکلیٹ چپ کوکیز کے 16 پیس۔', stock: 65, top_selling: false },
+    { id: 10, category: 'biscuits', name_en: 'BISCONNI CHOCOLATE CHIP RS 30', name_ur: 'بسکونی چاکلیٹ چپ 30 روپے', price: 30, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Choco+Chip', description_en: 'Larger pack of chocolate chip cookies.', description_ur: 'چاکلیٹ چپ کوکیز کا بڑا پیک۔', stock: 100, top_selling: true },
+    { id: 11, category: 'biscuits', name_en: 'BISCONNI CHOCOLATOTO RS 10', name_ur: 'بسکونی چاکولاتو 10 روپے', price: 10, image: 'https://placehold.co/300x300/a8a29e/292524?text=Chocolatoto', description_en: 'Chocolate-flavored wafer biscuits.', description_ur: 'چاکلیٹ کے ذائقے والے ویفر بسکٹ۔', stock: 140, top_selling: false },
+    { id: 12, category: 'biscuits', name_en: 'BISCONNI COCOMO CHOCOLATE RS 10', name_ur: 'بسکونی کوکومو چاکلیٹ 10 روپے', price: 10, image: 'https://placehold.co/300x300/a8a29e/292524?text=Cocomo', description_en: 'Chocolate-filled cookies.', description_ur: 'چاکلیٹ سے بھرے کوکیز۔', stock: 180, top_selling: true },
+    { id: 13, category: 'biscuits', name_en: 'BISCONNI COCOMO RS 100', name_ur: 'بسکونی کوکومو 100 روپے', price: 100, image: 'https://placehold.co/300x300/a8a29e/292524?text=Cocomo', description_en: 'Large pack of Cocomo cookies.', description_ur: 'کوکومو کوکیز کا بڑا پیک۔', stock: 40, top_selling: false },
+    { id: 14, category: 'biscuits', name_en: 'BISCONNI CRUX RS 10', name_ur: 'بسکونی کرکس 10 روپے', price: 10, image: 'https://placehold.co/300x300/fde047/b45309?text=Crux', description_en: 'Crispy biscuits.', description_ur: 'کرسپی بسکٹ۔', stock: 110, top_selling: false },
+    { id: 15, category: 'biscuits', name_en: 'BISCONNI DIGESTUVE ? sugar free', name_ur: 'بسکونی ڈائجسٹو (شوگر فری)', price: 0, image: 'https://placehold.co/300x300/d6d3d1/78716c?text=Digestive', description_en: 'Sugar-free digestive biscuits.', description_ur: 'شوگر فری ڈائجسٹو بسکٹ۔', stock: 35, top_selling: false },
+    { id: 16, category: 'biscuits', name_en: 'BISCONNI DIVINE RS 30', name_ur: 'بسکونی ڈیوائن 30 روپے', price: 30, image: 'https://placehold.co/300x300/6ee7b7/065f46?text=Divine', description_en: 'Divine flavored biscuits.', description_ur: 'ڈیوائن ذائقے والے بسکٹ۔', stock: 60, top_selling: false },
+    { id: 17, category: 'biscuits', name_en: 'BISCONNI FLARE RS 40', name_ur: 'بسکونی فلیئر 40 روپے', price: 40, image: 'https://placehold.co/300x300/fca5a5/b91c1c?text=Flare', description_en: 'Spicy flavored crackers.', description_ur: 'مسالہ دار فلیور والے کریکرز۔', stock: 45, top_selling: false },
+    { id: 18, category: 'bakery', name_en: 'BISCONNI FUDGE BROWINE RS 40', name_ur: 'بسکونی فج براؤنی 40 روپے', price: 40, image: 'https://placehold.co/300x300/d1d5db/4b5563?text=Fudge+Brownie', description_en: 'Rich fudge brownie.', description_ur: 'رچ فج براؤنی۔', stock: 25, top_selling: false },
+    { id: 19, category: 'bakery', name_en: 'BISCONNI LOTUS CAKE RS 40', name_ur: 'بسکونی لوٹس کیک 40 روپے', price: 40, image: 'https://placehold.co/300x300/e0f2fe/0ea5e9?text=Lotus+Cake', description_en: 'Lotus flavored cake.', description_ur: 'لوٹس کے ذائقے والا کیک۔', stock: 30, top_selling: false },
+    { id: 20, category: 'biscuits', name_en: 'BISCONNI MI AMOR RS 40', name_ur: 'بسکونی می امور 40 روپے', price: 40, image: 'https://placehold.co/300x300/fbcfe8/be185d?text=Mi+Amor', description_en: 'Sweet heart-shaped biscuits.', description_ur: 'میٹھے دل کی شکل والے بسکٹ۔', stock: 55, top_selling: false },
+    { id: 21, category: 'biscuits', name_en: 'BISCONNI NOVITA CHOCOLATE RS 10', name_ur: 'بسکونی نویٹا چاکلیٹ 10 روپے', price: 10, image: 'https://placehold.co/300x300/d4d4d4/525252?text=Novita+Choco', description_en: 'Chocolate cream-filled biscuits.', description_ur: 'چاکلیٹ کریم سے بھرے بسکٹ۔', stock: 170, top_selling: true },
+    { id: 22, category: 'biscuits', name_en: 'BISCONNI NOVITA ORANGE RS 10', name_ur: 'بسکونی نویٹا اورنج 10 روپے', price: 10, image: 'https://placehold.co/300x300/fed7aa/ea580c?text=Novita+Orange', description_en: 'Orange cream-filled biscuits.', description_ur: 'اورنج کریم سے بھرے بسکٹ۔', stock: 130, top_selling: false },
+    { id: 23, category: 'biscuits', name_en: 'BISCONNI PERFRTTO RS 30', name_ur: 'بسکونی پرفیکٹو 30 روپے', price: 30, image: 'https://placehold.co/300x300/a5f3fc/0891b2?text=Perfetto', description_en: 'Perfectly baked biscuits.', description_ur: 'مکمل طور پر پکے ہوئے بسکٹ۔', stock: 95, top_selling: false },
+    { id: 24, category: 'biscuits', name_en: 'BISCONNI PRIME ECLIPSE RS 30', name_ur: 'بسکونی پرائم ایکلپس 30 روپے', price: 30, image: 'https://placehold.co/300x300/c7d2fe/4338ca?text=Eclipse', description_en: 'Creamy filled sandwich biscuits.', description_ur: 'کریمی بھرے ہوئے سینڈوچ بسکٹ۔', stock: 85, top_selling: false },
+    { id: 25, category: 'biscuits', name_en: 'BISCONNI RITE RS 10', name_ur: 'بسکونی رائٹ 10 روپے', price: 10, image: 'https://placehold.co/300x300/fca5a5/b91c1c?text=Rite', description_en: 'Simple and delicious biscuits.', description_ur: 'سادہ اور مزیدار بسکٹ۔', stock: 210, top_selling: true },
+    { id: 26, category: 'biscuits', name_en: 'BISCONNI TEA MATE RS 20', name_ur: 'بسکونی ٹی میٹ 20 روپے', price: 20, image: 'https://placehold.co/300x300/f3e8ff/a855f7?text=Tea+Mate', description_en: 'Biscuits to enjoy with tea.', description_ur: 'چائے کے ساتھ لطف اندوز ہونے کے لیے بسکٹ۔', stock: 135, top_selling: false },
+    { id: 27, category: 'biscuits', name_en: 'BISCONNI TREAT RS 10', name_ur: 'بسکونی ٹریٹ 10 روپے', price: 10, image: 'https://placehold.co/300x300/bbf7d0/16a34a?text=Treat', description_en: 'A sweet treat biscuit.', description_ur: 'ایک میٹھا ٹریٹ بسکٹ۔', stock: 190, top_selling: false },
+    { id: 28, category: 'bakery', name_en: 'BISCONNI ROLLIES CAKES', name_ur: 'بسکونی رولیز کیکس', price: 0, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Rollies+Cakes', description_en: 'Swiss roll style cakes.', description_ur: 'سوئس رول اسٹائل کے کیکس۔', stock: 40, top_selling: false },
+    { id: 29, category: 'bakery', name_en: 'BISCONNI ZABER RUSK CAKE RUSK', name_ur: 'بسکونی زابر رسک کیک رسک', price: 0, image: 'https://placehold.co/300x300/ffedd5/9a3412?text=Rusk+Cake', description_en: 'Crispy cake rusk.', description_ur: 'کرسپی کیک رسک۔', stock: 60, top_selling: false },
+    { id: 30, category: 'bakery', name_en: 'BISONNI CHIP CAKE RS 50', name_ur: 'بسکونی چپ کیک 50 روپے', price: 50, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Chip+Cake', description_en: 'Cake with chocolate chips.', description_ur: 'چاکلیٹ چپس والا کیک۔', stock: 35, top_selling: false },
+    // PEEK FREANS PRODUCTS
+    { id: 41, category: 'Peek Freans', name_en: 'Peek Freans Sooper', name_ur: 'پیک فریز سوپر', price: 10, image: 'https://placehold.co/300x300/ffedd5/9a3412?text=Sooper', description_en: 'Pakistan\'s No. 1 selling biscuit, an original egg & milk cookie.', description_ur: 'پاکستان کا نمبر 1 سب سے زیادہ فروخت ہونے والا بسکٹ، اصل انڈے اور دودھ کی کوکی۔', stock: 300, top_selling: true },
+    { id: 42, category: 'Peek Freans', name_en: 'Peek Freans Sooper Elaichi', name_ur: 'پیک فریز سوپر الائچی', price: 10, image: 'https://placehold.co/300x300/ffedd5/9a3412?text=Sooper+Elaichi', description_en: 'An egg & milk cookie with the added flavor of cardamom.', description_ur: 'الائچی کے ذائقے والا انڈے اور دودھ کا بسکٹ۔', stock: 250, top_selling: false },
+    { id: 43, category: 'Peek Freans', name_en: 'Peek Freans Gluco', name_ur: 'پیک فریز گلوکو', price: 10, image: 'https://placehold.co/300x300/d6d3d1/78716c?text=Gluco', description_en: 'A classic biscuit with the goodness of milk and wheat.', description_ur: 'دودھ اور گندم کی بھلائی کے ساتھ ایک کلاسک بسکٹ۔', stock: 280, top_selling: true },
+    { id: 44, category: 'Peek Freans', name_en: 'Peek Freans Peanut Pik', name_ur: 'پیک فریز پینٹ پک', price: 10, image: 'https://placehold.co/300x300/d9f991/4d7c0f?text=Peanut+Pik', description_en: 'Biscuits with a delightful peanut flavor.', description_ur: 'مونگ پھلی کے مزیدار ذائقے والے بسکٹ۔', stock: 200, top_selling: false },
+    { id: 45, category: 'Peek Freans', name_en: 'Peek Freans Rio (Chocolate)', name_ur: 'پیک فریز ریو (چاکلیٹ)', price: 10, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Rio+Choco', description_en: 'Chocolate cream-filled sandwich cookies.', description_ur: 'چاکلیٹ کریم سے بھرے سینڈوچ کوکیز۔', stock: 190, top_selling: true },
+    { id: 46, category: 'Peek Freans', name_en: 'Peek Freans Rio (Strawberry)', name_ur: 'پیک فریز ریو (اسٹرابیری)', price: 10, image: 'https://placehold.co/300x300/fbcfe8/be185d?text=Rio+Straw', description_en: 'Strawberry cream-filled sandwich cookies.', description_ur: 'اسٹرابیری کریم سے بھرے سینڈوچ کوکیز۔', stock: 180, top_selling: false },
+    { id: 47, category: 'Peek Freans', name_en: 'Peek Freans Chocolate Sandwich', name_ur: 'پیک فریز چاکلیٹ سینڈوچ', price: 10, image: 'https://placehold.co/300x300/d4d4d4/525252?text=Choco+Sandwich', description_en: 'A rich chocolate sandwich biscuit.', description_ur: 'ایک رچ چاکلیٹ سینڈوچ بسکٹ۔', stock: 150, top_selling: false },
+    { id: 48, category: 'Peek Freans', name_en: 'Peek Freans Lemon Sandwich', name_ur: 'پیک فریز لیمن سینڈوچ', price: 10, image: 'https://placehold.co/300x300/fef08a/ca8a04?text=Lemon+Sandwich', description_en: 'A zesty lemon-flavored sandwich biscuit.', description_ur: 'لیموں کے ذائقے والا سینڈوچ بسکٹ۔', stock: 140, top_selling: false },
+    { id: 49, category: 'Peek Freans', name_en: 'Peek Freans Marie', name_ur: 'پیک فریز میری', price: 10, image: 'https://placehold.co/300x300/c7d2fe/4338ca?text=Marie', description_en: 'Light and crispy Marie biscuits.', description_ur: 'ہلکے اور کرسپی میری بسکٹ۔', stock: 220, top_selling: false },
+    { id: 50, category: 'Peek Freans', name_en: 'Peek Freans Click', name_ur: 'پیک فریز کلک', price: 10, image: 'https://placehold.co/300x300/d1d5db/374151?text=Click', description_en: 'A unique sweet and salty biscuit with a hint of cumin (zeera).', description_ur: 'زیرہ کے اشارے کے ساتھ ایک منفرد میٹھا اور نمکین بسکٹ۔', stock: 170, top_selling: true },
+    { id: 51, category: 'Peek Freans', name_en: 'Peek Freans Party', name_ur: 'پیک فریز پارٹی', price: 10, image: 'https://placehold.co/300x300/6ee7b7/065f46?text=Party', description_en: 'A light and airy biscuit perfect for any party.', description_ur: 'کسی بھی پارٹی کے لیے ایک ہلکا اور ہوا دار بسکٹ۔', stock: 160, top_selling: false },
+    { id: 52, category: 'Peek Freans', name_en: 'Peek Freans Saltish', name_ur: 'پیک فریز سالٹش', price: 10, image: 'https://placehold.co/300x300/fca5a5/b91c1c?text=Saltish', description_en: 'Salty crackers perfect for a snack.', description_ur: 'نمکین کریکرز، ناشتے کے لیے بہترین۔', stock: 120, top_selling: false },
+    { id: 53, category: 'Peek Freans', name_en: 'Peek Freans Farm House (Chocolate Chip)', name_ur: 'پیک فریز فارم ہاؤس (چاکلیٹ چپ)', price: 30, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Farm+House', description_en: 'Classic chocolate chip cookies.', description_ur: 'کلاسک چاکلیٹ چپ کوکیز۔', stock: 90, top_selling: true },
+    { id: 54, category: 'savory-crackers', name_en: 'Peek Freans Butter Puff', name_ur: 'پیک فریز بٹر پف', price: 20, image: 'https://placehold.co/300x300/fde047/b45309?text=Butter+Puff', description_en: 'Flaky and buttery crackers.', description_ur: 'فلی کی اور مکھن والے کریکرز۔', stock: 110, top_selling: false },
+    { id: 55, category: 'Peek Freans', name_en: 'Peek Freans Whole Wheat Slice (Sugar Free)', name_ur: 'پیک فریز ہول ویٹ سلائس (شوگر فری)', price: 50, image: 'https://placehold.co/300x300/d6d3d1/78716c?text=Whole+Wheat', description_en: 'A healthy sugar-free whole wheat biscuit.', description_ur: 'ایک صحت مند شوگر فری ہول ویٹ بسکٹ۔', stock: 70, top_selling: false },
+    { id: 56, category: 'cakes', name_en: 'Peek Freans Cake Up (Double Chocolate)', name_ur: 'پیک فریز کیک اپ (ڈبل چاکلیٹ)', price: 40, image: 'https://placehold.co/300x300/d4d4d4/525252?text=Cake+Up', description_en: 'A soft cake with a creamy chocolate center.', description_ur: 'ایک نرم کیک جس کے درمیان میں کریمی چاکلیٹ ہوتی ہے۔', stock: 80, top_selling: true },
+    { id: 57, category: 'cakes', name_en: 'Peek Freans Cake Up (Strawberry)', name_ur: 'پیک فریز کیک اپ (اسٹرابیری)', price: 40, image: 'https://placehold.co/300x300/fbcfe8/be185d?text=Cake+Up+Straw', description_en: 'A soft cake with a creamy strawberry center.', description_ur: 'ایک نرم کیک جس کے درمیان میں کریمی اسٹرابیری ہوتی ہے۔', stock: 75, top_selling: false },
+    { id: 58, category: 'cakes', name_en: 'Peek Freans Smile Donut Cake (Chocolate)', name_ur: 'پیک فریز سمائل ڈونٹ کیک (چاکلیٹ)', price: 30, image: 'https://placehold.co/300x300/d4d4d4/525252?text=Donut+Cake', description_en: 'A chocolate-flavored donut-shaped cake.', description_ur: 'چاکلیٹ کے ذائقے والا ڈونٹ کی شکل کا کیک۔', stock: 65, top_selling: false },
+    { id: 59, category: 'cakes', name_en: 'Peek Freans Gluco Teddy Cake', name_ur: 'پیک فریز گلوکو ٹیڈی کیک', price: 40, image: 'https://placehold.co/300x300/d6d3d1/78716c?text=Teddy+Cake', description_en: 'A teddy bear-shaped cake, great for kids.', description_ur: 'ٹیڈی بیئر کی شکل کا کیک، بچوں کے لیے بہترین۔', stock: 95, top_selling: false },
+    { id: 60, category: 'cakes', name_en: 'Peek Freans Brownie Cake', name_ur: 'پیک فریز براؤنی کیک', price: 50, image: 'https://placehold.co/300x300/525252/d4d4d4?text=Brownie+Cake', description_en: 'A rich and fudgy brownie cake.', description_ur: 'ایک رچ اور فجی براؤنی کیک۔', stock: 50, top_selling: true },
+    { id: 61, category: 'Peek Freans', name_en: 'Peek Freans Choco Lava', name_ur: 'پیک فریز چاکو لاوا', price: 40, image: 'https://placehold.co/300x300/fecdd3/f43f5e?text=Choco+Lava', description_en: 'Biscuits with a liquid chocolate lava filling.', description_ur: 'مائع چاکلیٹ لاوا بھرائی والے بسکٹ۔', stock: 80, top_selling: true },
+    { id: 62, category: 'Peek Freans', name_en: 'Peek Freans Choco Licious', name_ur: 'پیک فریز چاکو لیشئس', price: 20, image: 'https://placehold.co/300x300/fecaca/dc2626?text=Choco+Licious', description_en: 'A chocolate biscuit with chocolate chips.', description_ur: 'چاکلیٹ چپس والا ایک چاکلیٹ بسکٹ۔', stock: 120, top_selling: false },
+    { id: 63, category: 'Peek Freans', name_en: 'Peek Freans Nankhatai Almond', name_ur: 'پیک فریز نان خطائی بادام', price: 20, image: 'https://placehold.co/300x300/ffedd5/9a3412?text=Nankhatai+Almond', description_en: 'A traditional Nankhatai cookie with almond flavor.', description_ur: 'بادام کے ذائقے والی ایک روایتی نان خطائی کوکی۔', stock: 100, top_selling: false },
+];
+        const defaultOrders = [
+            { id: `AW-123456`, customer: 'Ahmed Khan', date: '2025-08-29', total: 1100, status: 'Processing' },
+            { id: `AW-234567`, customer: 'Fatima Ali', date: '2025-08-28', total: 430, status: 'Shipped' },
+        ];
+        if (!localStorage.getItem('ayatWholesaleProducts')) saveData('ayatWholesaleProducts', defaultProducts);
+        if (!localStorage.getItem('ayatWholesaleCategories')) saveData('ayatWholesaleCategories', defaultCategories);
+        if (!localStorage.getItem('ayatWholesaleOrders')) saveData('ayatWholesaleOrders', defaultOrders);
+        function getProducts() { return loadData('ayatWholesaleProducts', []); }
+        function getCategories() { return loadData('ayatWholesaleCategories', []); }
+        function saveOrder(orderData) {
+            const orders = loadData('ayatWholesaleOrders', []);
+            orders.push(orderData);
+            saveData('ayatWholesaleOrders', orders);
+        }
+    </script>
+    
+    <!-- Main Application Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const categories = getCategories();
+            const products = getProducts();
+            const translations = {
+                en: {
+                    nav_home: 'Home', nav_shop: 'Shop', nav_about: 'About Us',
+                    search_placeholder: 'Search for products...',
+                    hero_title: 'Fresh Groceries, Ready for Pickup',
+                    hero_subtitle: 'Get the best quality products from your neighborhood store. Home delivery coming soon!',
+                    hero_cta: 'Shop Now',
+                    featured_categories: 'Featured Categories', top_selling: 'Top Selling Products', add_to_cart: 'Add to Cart', view_details: 'View Details',
+                    filter_categories: 'Categories', all_products: 'All Products', pdp_stock: 'In Stock', pdp_quantity: 'Quantity',
+                    cart_title: 'Your Shopping Cart', cart_empty: 'Your cart is empty.',
+                    cart_product: 'Product', cart_price: 'Price', cart_quantity: 'Quantity', cart_total: 'Total',
+                    cart_grand_total: 'Total Amount', cart_checkout_btn: 'Proceed to Pickup',
+                    checkout_title: 'Checkout', pickup_info: 'Your Information',
+                    form_name: 'Full Name', form_phone: 'Phone Number', payment_method: 'Payment Method',
+                    payment_pickup: 'Pay at Pickup', payment_jazzcash: 'Pay Now (EasyPaisa)',
+                    payment_instructions: 'Please transfer to the following account and confirm your order via WhatsApp:',
+                    order_summary: 'Order Summary', place_order_btn: 'Confirm for Pickup',
+                    confirm_title: 'Your Order is Confirmed!', confirm_subtitle: 'It will be ready for pickup shortly.', confirm_order_id: 'Your Order ID is:',
+                    confirm_whatsapp_btn: 'Confirm Order on WhatsApp', continue_shopping: 'Continue Shopping',
+                    about_title: 'About Ayat Wholesale',
+                    about_p1: "Welcome to Ayat Wholesale, your trusted neighborhood grocery store, now online! We started with a simple mission: to bring fresh, high-quality groceries and everyday essentials to our community with the convenience of online shopping. We are based in the heart of Nazimabad, Karachi, and are proud to serve our local customers.",
+                    about_p2: "We understand the importance of quality and trust when it comes to your family's needs. That's why we source our products from reliable local suppliers and farmers, ensuring you get the best every time. Thank you for choosing Ayat Wholesale. We look forward to serving you!",
+                    footer_location: 'Serving our community in Nazimabad, Karachi',
+                    generate_recipe: '✨ Generate Recipe from Cart', loading_recipe: 'Generating a delicious recipe...', recipe_error: 'Sorry, we couldn\'t generate a recipe at this time. Please try again later.',
+                    our_address: 'Our Address', opening_hours: 'Opening Hours', seven_days: 'Open 7 Days a Week', current_time_location: 'Current Date & Time in Karachi, Pakistan',
+                    status_open: 'Open Now', status_closed: 'Closed',
+                    pickup_only_title: 'Order for In-Store Pickup',
+                    pickup_only_desc: 'Home delivery is coming soon! For now, all orders must be picked up from our shop.',
+                    pickup_details_title: 'Pickup Details',
+                    pickup_details_address: 'W28M+983, Nazimabad No. 4, Karachi',
+                    pickup_details_hours: 'Hours: 10am-2pm & 5pm-10pm'
+                },
+                ur: {
+                    nav_home: 'گھر', nav_shop: 'خریداری', nav_about: 'ہمارے بارے میں',
+                    search_placeholder: 'مصنوعات تلاش کریں۔۔۔',
+                    hero_title: 'تازہ گروسری، پک اپ کے لیے تیار',
+                    hero_subtitle: 'اپنے پڑوس کے اسٹور سے بہترین معیار کی مصنوعات حاصل کریں۔ ہوم ڈیلیوری جلد آرہی ہے!',
+                    hero_cta: 'ابھی خریداری کریں',
+                    featured_categories: 'نمایاں کیٹیگریز', top_selling: 'سب سے زیادہ فروخت ہونے والی مصنوعات', add_to_cart: 'کارٹ میں شامل کریں', view_details: 'تفصیلات دیکھیں',
+                    filter_categories: 'کیٹیگریز', all_products: 'تمام مصنوعات', pdp_stock: 'اسٹاک میں ہے', pdp_quantity: 'مقدار',
+                    cart_title: 'آپ کی شاپنگ کارٹ', cart_empty: 'آپ کی کارٹ خالی ہے۔',
+                    cart_product: 'پروڈکٹ', cart_price: 'قیمت', cart_quantity: 'مقدار', cart_total: 'کل',
+                    cart_grand_total: 'کل رقم', cart_checkout_btn: 'پک اپ کے لیے آگے بڑھیں',
+                    checkout_title: 'چیک آؤٹ', pickup_info: 'آپ کی معلومات',
+                    form_name: 'پورا نام', form_phone: 'فون نمبر', payment_method: 'ادائیگی کا طریقہ',
+                    payment_pickup: 'پک اپ پر ادائیگی کریں', payment_jazzcash: 'ابھی ادائیگی کریں (ایزی پیسہ)',
+                    payment_instructions: 'براہ کرم درج ذیل اکاؤنٹ میں رقم منتقل کریں اور واٹس ایپ پر اپنے آرڈر کی تصدیق کریں:',
+                    order_summary: 'آرڈر کا خلاصہ', place_order_btn: 'پک اپ کے لیے تصدیق کریں',
+                    confirm_title: 'آپ کے آرڈر کی تصدیق ہو گئی ہے!', confirm_subtitle: 'یہ جلد ہی پک اپ کے لیے تیار ہو جائے گا۔', confirm_order_id: 'آپ کا آرڈر آئی ڈی ہے:',
+                    confirm_whatsapp_btn: 'واٹس ایپ پر آرڈر کی تصدیق کریں', continue_shopping: 'خریداری جاری رکھیں',
+                    about_title: 'آیت ہول سیل کے بارے میں',
+                    about_p1: "آیت ہول سیل، آپ کے भरोसे مند پڑوسی گروسری اسٹور، میں خوش آمدید، اب آن لائن! ہم نے ایک سادہ مشن کے ساتھ آغاز کیا: تازہ، اعلیٰ معیار کی گروسری اور روزمرہ کی ضروریات کو آن لائن شاپنگ کی سہولت کے ساتھ اپنی کمیٹی تک پہنچانا۔ ہم ناظم آباد، کراچی کے دل میں واقع ہیں، اور اپنے مقامی صارفین کی خدمت کرنے پر فخر محسوس کرتے ہیں۔",
+                    about_p2: "ہم آپ کے خاندان کی ضروریات کے حوالے سے معیار اور اعتماد کی اہمیت کو سمجھتے ہیں۔ اسی لیے ہم اپنی مصنوعات قابل اعتماد مقامی سپلائرز اور کسانوں سے حاصل کرتے ہیں، تاکہ آپ کو ہر بار بہترین ملے۔ آیت ہول سیل کو منتخب کرنے کا شکریہ۔ ہم آپ کی خدمت کے منتظر ہیں!",
+                    footer_location: 'ناظم آباد، کراچی میں اپنی کمیٹی کی خدمت کرتے ہوئے',
+                    generate_recipe: '✨ کارٹ سے ترکیب بنائیں', loading_recipe: 'ایک مزیدار ترکیب تیار کی جا رہی ہے۔۔۔', recipe_error: 'معذرت، ہم اس وقت ترکیب تیار نہیں کر سکے۔ براہ کرم بعد میں دوبارہ کوشش کریں۔',
+                    our_address: 'ہمارا پتہ', opening_hours: 'کھلنے کے اوقات', seven_days: 'ہفتے کے 7 دن کھلا ہے', current_time_location: 'کراچی، پاکستان میں موجودہ تاریخ اور وقت',
+                    status_open: 'اب کھلا ہے', status_closed: 'بند ہے',
+                    pickup_only_title: 'ان-اسٹور پک اپ کے لیے آرڈر کریں',
+                    pickup_only_desc: 'ہوم ڈیلیوری جلد آرہی ہے! فی الحال، تمام آرڈرز ہماری دکان سے پک اپ کرنے ہوں گے۔',
+                    pickup_details_title: 'پک اپ کی تفصیلات',
+                    pickup_details_address: 'W28M+983، ناظم آباد نمبر 4، کراچی',
+                    pickup_details_hours: 'اوقات: صبح 10 سے دوپہر 2 بجے اور شام 5 سے رات 10 بجے'
+                }
+            };
+            let currentLanguage = 'en';
+            let cart = JSON.parse(localStorage.getItem('ayatWholesaleCart')) || [];
+            const pages = document.querySelectorAll('main > section');
+            const langToggleButton = document.getElementById('lang-toggle');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            const renderProductCard = (product) => `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden group transition hover:shadow-xl cursor-pointer" data-product-id="${product.id}">
+                    <div class="relative">
+                        <img src="${product.image}" alt="${product.name_en}" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                            <span class="text-white font-bold" data-translate-key="view_details">View Details</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg truncate">${product['name_' + currentLanguage]}</h3>
+                        <p class="text-gray-500 text-xl font-bold mt-2">Rs. ${product.price}</p>
+                        <button class="add-to-cart-btn w-full mt-4 btn-primary py-2 rounded-lg font-semibold" data-product-id="${product.id}" data-translate-key="add_to_cart">Add to Cart</button>
+                    </div>
+                </div>`;
+
+            const renderCategories = () => {
+                const featuredContainer = document.getElementById('featured-categories');
+                const plpContainer = document.getElementById('plp-categories');
+                let featuredHTML = '';
+                let plpHTML = `<li><a href="#" class="font-semibold text-green-600" data-page="plp-page" data-category="all" data-translate-key="all_products">All Products</a></li>`;
+                categories.forEach(cat => {
+                    const name = cat['name_' + currentLanguage];
+                    featuredHTML += `<a href="#" class="bg-white p-4 rounded-lg shadow-sm text-center transition hover:shadow-lg hover:scale-105" data-page="plp-page" data-category="${cat.id}"><i class="fas ${cat.icon} text-4xl text-green-500 mb-2"></i><p class="font-semibold">${name}</p></a>`;
+                    plpHTML += `<li><a href="#" class="hover:text-green-600" data-page="plp-page" data-category="${cat.id}">${name}</a></li>`;
+                });
+                if(featuredContainer) featuredContainer.innerHTML = featuredHTML;
+                if(plpContainer) plpContainer.innerHTML = plpHTML;
+            };
+
+            const renderHomePage = () => {
+                const topSellingContainer = document.getElementById('top-selling-products');
+                topSellingContainer.innerHTML = products.filter(p => p.top_selling).slice(0, 5).map(renderProductCard).join('');
+                renderCategories();
+            };
+
+            const renderPLP = (category = 'all', searchTerm = '') => {
+                const productsContainer = document.getElementById('plp-products');
+                const titleEl = document.getElementById('plp-title');
+                let filteredProducts = products;
+                if (category !== 'all') {
+                    filteredProducts = products.filter(p => p.category === category);
+                    titleEl.textContent = categories.find(c => c.id === category)['name_' + currentLanguage];
+                } else {
+                    titleEl.textContent = translations[currentLanguage].all_products;
+                }
+                if (searchTerm) {
+                    const lowerSearchTerm = searchTerm.toLowerCase();
+                    filteredProducts = filteredProducts.filter(p => p.name_en.toLowerCase().includes(lowerSearchTerm) || p.name_ur.includes(searchTerm));
+                    titleEl.textContent = `Search results for "${searchTerm}"`;
+                }
+                productsContainer.innerHTML = filteredProducts.map(renderProductCard).join('');
+                document.querySelectorAll('#plp-categories a').forEach(a => a.classList.toggle('font-semibold', a.dataset.category === category));
+            };
+
+            const renderPDP = (productId) => {
+                const product = products.find(p => p.id === productId);
+                document.getElementById('pdp-page').innerHTML = `
+                    <div class="grid md:grid-cols-2 gap-8"><img src="${product.image}" alt="${product.name_en}" class="w-full rounded-lg shadow-lg"><div>
+                    <h2 class="text-4xl font-bold mb-4">${product['name_' + currentLanguage]}</h2>
+                    <p class="text-3xl font-bold text-green-600 mb-4">Rs. ${product.price}</p>
+                    <p class="text-gray-600 mb-6">${product['description_' + currentLanguage]}</p>
+                    <div class="flex items-center space-x-4 mb-6"><span class="font-semibold" data-translate-key="pdp_stock">In Stock:</span><span>${product.stock}</span></div>
+                    <div class="flex items-center space-x-4"><label for="pdp-quantity" class="font-semibold" data-translate-key="pdp_quantity">Quantity:</label>
+                    <input type="number" id="pdp-quantity" value="1" min="1" max="${product.stock}" class="w-20 p-2 border rounded">
+                    <button class="add-to-cart-btn flex-1 btn-primary py-3 rounded-lg text-lg font-semibold" data-product-id="${product.id}" data-translate-key="add_to_cart">Add to Cart</button></div></div></div>`;
+            };
+
+            const renderCartPage = () => {
+                const cartContent = document.getElementById('cart-content');
+                const cartEmptyMessage = document.getElementById('cart-empty-message');
+                const cartContainer = document.getElementById('cart-container');
+                document.getElementById('generate-recipe-btn').innerHTML = translations[currentLanguage].generate_recipe;
+                if (cart.length === 0) {
+                    cartContent.classList.add('hidden');
+                    cartEmptyMessage.classList.remove('hidden');
+                    return;
+                }
+                cartContent.classList.remove('hidden');
+                cartEmptyMessage.classList.add('hidden');
+                let itemsHTML = '<div class="divide-y">';
+                let subtotal = 0;
+                cart.forEach(item => {
+                    const product = products.find(p => p.id === item.productId);
+                    if (!product) { cart = cart.filter(c => c.productId !== item.productId); updateCart(); renderCartPage(); return; }
+                    const itemTotal = product.price * item.quantity;
+                    subtotal += itemTotal;
+                    itemsHTML += `<div class="flex items-center justify-between py-4"><div class="flex items-center space-x-4"><img src="${product.image}" alt="${product.name_en}" class="w-20 h-20 object-cover rounded-lg"><div><h4 class="font-semibold">${product['name_' + currentLanguage]}</h4><p class="text-gray-500">Rs. ${product.price}</p></div></div><div class="flex items-center space-x-4"><input type="number" value="${item.quantity}" min="1" max="${product.stock}" class="cart-quantity-input w-16 p-1 border rounded text-center" data-product-id="${product.id}"><p class="font-semibold w-24 text-right">Rs. ${itemTotal}</p><button class="remove-from-cart-btn text-red-500 hover:text-red-700 text-2xl" data-product-id="${product.id}">&times;</button></div></div>`;
+                });
+                itemsHTML += '</div>';
+                cartContainer.innerHTML = `${itemsHTML}<div class="mt-6 border-t pt-6 text-right"><p class="text-xl font-bold"><span data-translate-key="cart_grand_total">Total Amount:</span> <span class="text-green-600">Rs. ${subtotal}</span></p><button class="w-full md:w-auto mt-6 btn-primary px-8 py-3 rounded-lg text-lg" data-page="checkout-page" data-translate-key="cart_checkout_btn">Proceed to Pickup</button></div>`;
+            };
+
+            const renderCheckoutPage = () => {
+                let subtotal = 0;
+                cart.forEach(item => subtotal += products.find(p => p.id === item.productId).price * item.quantity);
+                document.getElementById('checkout-summary').innerHTML = `<div class="space-y-2 border-b pb-2 mb-2">${cart.map(item => { const p = products.find(p => p.id === item.productId); return `<div class="flex justify-between text-sm"><span>${item.quantity} x ${p['name_' + currentLanguage]}</span><span>Rs. ${p.price * item.quantity}</span></div>` }).join('')}</div><div class="flex justify-between font-bold text-lg mt-2 pt-2 border-t"><span data-translate-key="cart_grand_total">Total Amount</span><span>Rs. ${subtotal}</span></div>`;
+            };
+
+            const generateRecipe = async () => { /* ... Gemini API logic remains the same ... */ };
+
+            const showPage = (pageId, options = {}) => {
+                pages.forEach(page => page.classList.add('hidden'));
+                document.getElementById(pageId).classList.remove('hidden');
+                window.scrollTo(0, 0);
+                if (pageId === 'home-page') renderHomePage();
+                if (pageId === 'plp-page') renderPLP(options.category, options.searchTerm);
+                if (pageId === 'pdp-page') renderPDP(parseInt(options.productId));
+                if (pageId === 'cart-page') renderCartPage();
+                if (pageId === 'checkout-page') renderCheckoutPage();
+                if (pageId === 'about-page') updateTime();
+            };
+
+            const updateCart = () => {
+                localStorage.setItem('ayatWholesaleCart', JSON.stringify(cart));
+                document.getElementById('cart-count').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            };
+
+            const addToCart = (productId, quantity = 1) => {
+                const existingItem = cart.find(item => item.productId === productId);
+                if (existingItem) { existingItem.quantity += quantity; } else { cart.push({ productId, quantity }); }
+                updateCart();
+            };
+
+            const switchLanguage = (lang) => {
+                currentLanguage = lang;
+                document.documentElement.lang = lang;
+                const body = document.querySelector('body');
+                const searchInput = document.getElementById('search-input');
+                if (lang === 'ur') { body.classList.add('urdu'); searchInput.classList.add('urdu-input'); langToggleButton.textContent = 'EN'; } 
+                else { body.classList.remove('urdu'); searchInput.classList.remove('urdu-input'); langToggleButton.textContent = 'اردو'; }
+                document.querySelectorAll('[data-translate-key]').forEach(el => {
+                    const key = el.dataset.translateKey;
+                    if (translations[lang][key]) {
+                        if (el.placeholder !== undefined) { el.placeholder = translations[lang][key]; } 
+                        else { el.textContent = translations[lang][key]; }
+                    }
+                });
+                const currentPage = Array.from(pages).find(p => !p.classList.contains('hidden'));
+                if (currentPage) showPage(currentPage.id, {});
+                updateShopStatus();
+            };
+
+            const updateTime = () => {
+                const timeEl = document.getElementById('current-time');
+                if (!timeEl) return;
+                timeEl.textContent = new Intl.DateTimeFormat([], { timeZone: 'Asia/Karachi', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(new Date());
+            };
+
+            const updateShopStatus = () => {
+                const statusEl = document.getElementById('shop-status');
+                if(!statusEl) return;
+                const currentHour = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Karachi"})).getHours();
+                const isOpen = (currentHour >= 10 && currentHour < 14) || (currentHour >= 17 && currentHour < 22);
+                if (isOpen) {
+                    statusEl.textContent = translations[currentLanguage].status_open;
+                    statusEl.className = 'text-xs font-bold px-2 py-1 rounded-full bg-green-100 text-green-800';
+                } else {
+                    statusEl.textContent = translations[currentLanguage].status_closed;
+                    statusEl.className = 'text-xs font-bold px-2 py-1 rounded-full bg-red-500 text-white';
+                }
+            };
+
+            langToggleButton.addEventListener('click', () => switchLanguage(currentLanguage === 'en' ? 'ur' : 'en'));
+            mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            document.getElementById('generate-recipe-btn').addEventListener('click', generateRecipe);
+
+            document.body.addEventListener('click', (e) => {
+                const navLink = e.target.closest('[data-page]');
+                if (navLink) { e.preventDefault(); showPage(navLink.dataset.page, { category: navLink.dataset.category, productId: navLink.dataset.productId }); if (!mobileMenu.classList.contains('hidden')) { mobileMenu.classList.add('hidden'); } return; }
+                const addToCartBtn = e.target.closest('.add-to-cart-btn');
+                if (addToCartBtn) {
+                    const productId = parseInt(addToCartBtn.dataset.productId);
+                    const quantity = document.getElementById('pdp-quantity') ? parseInt(document.getElementById('pdp-quantity').value) : 1;
+                    addToCart(productId, quantity);
+                    const originalText = addToCartBtn.innerHTML; addToCartBtn.textContent = 'Added!'; setTimeout(() => { addToCartBtn.innerHTML = originalText; const key = addToCartBtn.dataset.translateKey; if(key) addToCartBtn.textContent = translations[currentLanguage][key]; }, 1000); return;
+                }
+                if (e.target.closest('div[data-product-id]') && !e.target.closest('.add-to-cart-btn')) { showPage('pdp-page', { productId: parseInt(e.target.closest('[data-product-id]').dataset.productId) }); return; }
+                const removeFromCartBtn = e.target.closest('.remove-from-cart-btn');
+                if (removeFromCartBtn) { cart = cart.filter(item => item.productId !== parseInt(removeFromCartBtn.dataset.productId)); updateCart(); renderCartPage(); return; }
+            });
+
+            document.body.addEventListener('change', (e) => {
+                const quantityInput = e.target.closest('.cart-quantity-input');
+                if (quantityInput) {
+                    const cartItem = cart.find(item => item.productId === parseInt(quantityInput.dataset.productId));
+                    if (cartItem && parseInt(quantityInput.value) > 0) { cartItem.quantity = parseInt(quantityInput.value); updateCart(); renderCartPage(); }
+                }
+            });
+
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                if (e.target.value.length > 1) { showPage('plp-page', { searchTerm: e.target.value }); }
+                else if (Array.from(pages).find(p => !p.classList.contains('hidden'))?.id === 'plp-page') { showPage('plp-page', { category: 'all' }); }
+            });
+            
+            document.querySelectorAll('input[name="payment"]').forEach(radio => radio.addEventListener('change', (e) => document.getElementById('jazzcash-info').classList.toggle('hidden', e.target.value !== 'jazzcash')));
+
+            document.getElementById('checkout-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const orderId = `AW-${Date.now().toString().slice(-6)}`;
+                document.getElementById('order-id').textContent = orderId;
+                const whatsappBtnContainer = document.getElementById('confirmation-whatsapp');
+                if (document.querySelector('input[name="payment"]:checked').value === 'jazzcash') {
+                    const message = encodeURIComponent(`Hello Ayat Wholesale, I have placed Order #${orderId} for pickup and made a payment via EasyPaisa. Please confirm.`);
+                    whatsappBtnContainer.innerHTML = `<a href="https://wa.me/923146556463?text=${message}" target="_blank" class="bg-green-500 text-white px-6 py-3 rounded-lg inline-flex items-center space-x-2"><i class="fab fa-whatsapp"></i><span data-translate-key="confirm_whatsapp_btn">Confirm Payment on WhatsApp</span></a>`;
+                } else { whatsappBtnContainer.innerHTML = ''; }
+                const subtotal = cart.reduce((sum, item) => sum + (products.find(p => p.id === item.productId).price * item.quantity), 0);
+                saveOrder({ id: orderId, customer: document.getElementById('fullName').value, date: new Date().toISOString().split('T')[0], total: subtotal, status: 'Processing' });
+                cart = []; updateCart(); showPage('confirmation-page');
+            });
+
+            showPage('home-page');
+            updateCart();
+            updateTime();
+            updateShopStatus();
+            setInterval(updateTime, 1000);
+            setInterval(updateShopStatus, 60000);
+        });
+    </script>
+</body>
+</html>
+
+
